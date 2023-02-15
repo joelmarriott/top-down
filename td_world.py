@@ -72,16 +72,16 @@ class Tile:
         
         if hit and self.solid:
             if player.vel_x < 0:
-                player.pos_x += round(player.speed * 2.2)
+                player.pos_x += round(player.speed * 1.9)
 
             if player.vel_x > 0:
-                player.pos_x -= round(player.speed * 2.2)
+                player.pos_x -= round(player.speed * 1.9)
 
             if player.vel_y < 0:
-                player.pos_y += round(player.speed * 2.2)
+                player.pos_y += round(player.speed * 1.9)
 
             if player.vel_y > 0:
-                player.pos_y -= round(player.speed * 2.2)
+                player.pos_y -= round(player.speed * 1.9)
                 
             player.move()
 
