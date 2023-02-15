@@ -2,13 +2,14 @@ import pygame
 from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
 from td_world import WorldMap
 from td_player import Player
-from td_ui import Inventory
+from td_ui import Menu, Inventory
 
 
-def draw_window(win, this_world, player, inventory, event):
+def draw_window(win, this_world, player, inventory, event, menu):
     win.fill(pygame.Color(0,0,0))
     this_world.draw(win)
     player.draw(win)
+    menu.draw(win, event)
     if inventory.inv_toggle:
         inventory.draw(win, (500, 300), event)
     
@@ -21,8 +22,6 @@ def main():
             [ 0, 0, 0, 6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 0, 0, 0 ],
             [ 0, 0, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0 ],
             [ 0, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0 ],
-            [ 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 0 ],
-            [ 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 0 ],
             [ 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 0 ],
             [ 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 0 ],
             [ 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 0 ],
@@ -63,6 +62,8 @@ def main():
     player_y = (WIN_HEIGHT - TILE_SIZE) / 2
     player = Player(player_x, player_y)
     
+    menu = Menu()
+    
     inventory = Inventory()
     
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
@@ -86,7 +87,7 @@ def main():
             
         this_world.check_collide(player)
         
-        draw_window(win, this_world, player, inventory, event)
+        draw_window(win, this_world, player, inventory, event, menu)
 
 
 if __name__ == '__main__':
