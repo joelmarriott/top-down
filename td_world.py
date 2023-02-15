@@ -1,4 +1,5 @@
 from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
+import random
 import pygame
 
 class WorldMap:
@@ -23,16 +24,26 @@ class WorldMap:
         for i, row in enumerate(map_matrix):
             self.world_map.append([])
             for tile in row:
+                solid = False
+                if tile <= 0:
+                    image = 0
                 if tile > 1:
+                    image = images[tile]
                     solid = True
-                else:
-                    solid = False
-                self.world_map[i].append(Tile(images[tile], solid))
+                if tile == 1:
+                    grass_type = random.randint(0,100)
+                    if grass_type < 60:
+                        image = get_image('world/tile_grass')
+                    elif grass_type >= 80:
+                        image = get_image('world/tile_grass_1')
+                    else:
+                        image = get_image('world/tile_grass_2')
+                self.world_map[i].append(Tile(image, solid))
         
     def draw(self, win):
-        tile_x = (WIN_WIDTH - (len(self.world_map[0]) * TILE_SIZE)) / 2
+        tile_x = (WIN_WIDTH - (len(self.world_map[0]) * TILE_SIZE)) / 2 + (TILE_SIZE / 2)
         start_tile_x = tile_x
-        tile_y = (WIN_HEIGHT - (len(self.world_map)* TILE_SIZE)) / 2
+        tile_y = (WIN_HEIGHT - (len(self.world_map)* TILE_SIZE)) / 2 + (TILE_SIZE / 2.5)
         for row in self.world_map:
             for tile in row:
                 if tile:
@@ -73,16 +84,16 @@ class Tile:
         
         if hit and self.solid:
             if player.vel_x < 0:
-                player.pos_x += round(player.speed * 1.9)
+                player.pos_x += round(player.speed * 1.95)
 
             if player.vel_x > 0:
-                player.pos_x -= round(player.speed * 1.9)
+                player.pos_x -= round(player.speed * 1.95)
 
             if player.vel_y < 0:
-                player.pos_y += round(player.speed * 1.9)
+                player.pos_y += round(player.speed * 1.95)
 
             if player.vel_y > 0:
-                player.pos_y -= round(player.speed * 1.9)
+                player.pos_y -= round(player.speed * 1.95)
                 
             player.move()
 

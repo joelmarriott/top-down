@@ -1,18 +1,6 @@
 from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
 import pygame
 
-class UI:
-    def __init__(self):
-        self.BACKGROUND = get_image('ui/blank')
-        self.width = self.BACKGROUND.get_width()
-        self.height = self.BACKGROUND.get_height()
-        
-    def draw(self, win, pos):
-        self.box = pygame.Surface((self.width, self.height))
-        self.box.blit(self.BACKGROUND, (0,0))
-        win.blit(self.box, pos)
-         
-
 
 class Slot:
     def __init__(self, pos):
@@ -34,7 +22,7 @@ class Slot:
         
 
 
-class Inventory(UI):
+class Inventory:
     def __init__(self):
         self.BACKGROUND = get_image('ui/inventory')
         self.width = self.BACKGROUND.get_width()
