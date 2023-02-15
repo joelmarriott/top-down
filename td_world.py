@@ -18,6 +18,7 @@ class WorldMap:
                      get_image('tile_corner_2', 90),  # 7  (bottom_left)
                      get_image('tile_corner_2', 180), # 8  (bottom_right)
                      get_image('tile_corner_2', -90), # 9  (top_right)
+                     get_image('tile_fill')           # 10
         ]
         for i, row in enumerate(map_matrix):
             self.world_map.append([])
