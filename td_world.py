@@ -5,7 +5,6 @@ class WorldMap:
     def __init__(self, map_matrix):
         self.world_map = []
         self.construct_map(map_matrix)
-        self.relocate = []
         
     def construct_map(self, map_matrix):
         images = [
