@@ -26,7 +26,6 @@ class WorldMap:
                     solid = True
                 else:
                     solid = False
-                print(images[tile])
                 self.world_map[i].append(Tile(images[tile], solid))
         
     def draw(self, win):
@@ -42,6 +41,14 @@ class WorldMap:
                 tile_x += TILE_SIZE - 1
             tile_x = start_tile_x
             tile_y += TILE_SIZE - 1
+            
+            
+    def check_collide(self, player):
+        for row in self.world_map:
+            for tile in row:
+                if not tile.image:
+                    continue
+                tile.check_collide(player)
             
             
 class Tile:
@@ -63,18 +70,20 @@ class Tile:
         
         hit = player_mask.overlap(tile_mask, tile_offset)
         
-        if hit:
+        if hit and self.solid:
             if player.vel_x < 0:
-                player.pos_x = self.pos_x + self.image.get_width()
+                player.pos_x += round(player.speed * 2.2)
 
             if player.vel_x > 0:
-                player.pos_x = self.pos_x - player.image.get_width()
+                player.pos_x -= round(player.speed * 2.2)
 
             if player.vel_y < 0:
-                player.pos_y = self.pos_y + self.image.get_height()
+                player.pos_y += round(player.speed * 2.2)
 
             if player.vel_y > 0:
-                player.pos_y = self.pos_y - player.image.get_height()
+                player.pos_y -= round(player.speed * 2.2)
+                
+            player.move()
 
         if hit:
             return True
