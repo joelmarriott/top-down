@@ -1,4 +1,4 @@
-from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
+from td_common import get_image
 import pygame
 
 class Player:
@@ -29,6 +29,7 @@ class Player:
         if keys[pygame.K_DOWN] or keys[ord('s')]:
             self.pos_y += self.speed
             self.vel_y = 1
+            
             
     def get_mask(self):
         return pygame.mask.from_surface(self.image)
