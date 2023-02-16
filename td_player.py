@@ -7,8 +7,8 @@ class Player:
         self.pos_y = pos_y - 4
         self.vel_x = 0
         self.vel_y = 0
-        self.speed = 10
-        self.image = get_image('player/player_still')
+        self.speed = 5
+        self.image = get_image('player/design/player_animate1')
         self.direction = 0
         
     def draw(self, win):
@@ -41,11 +41,42 @@ class Player:
             self.vel_y = 1
 
         if left or right or up or down:
-            self.image = get_image('player/player_moving', self.direction)
+            if self.moving == 0:
+                self.moving = 1
         else:
-            self.image = get_image('player/player_still', self.direction)
-            
+            self.moving = 0
+        self.get_player_image()
             
             
     def get_mask(self):
         return pygame.mask.from_surface(self.image)
+    
+    
+    def get_player_image(self):
+        if self.moving == 0:
+            if self.direction == 0:
+                self.image = get_image('player/design/player_animate1')
+            elif self.direction == 180:
+                self.image = get_image('player/design/player_animate_back1')
+            elif self.direction == 90:
+                self.image = get_image('player/design/player_animate_side_right1')
+            else:
+                self.image = get_image('player/design/player_animate_side_left1')
+                
+        if self.moving > 0:
+            frame = round(self.moving/4)
+            if frame == 0:
+                frame = 1
+            if self.direction == 0:
+                self.image = get_image('player/design/player_animate'+str(frame))
+            elif self.direction == 180:
+                self.image = get_image('player/design/player_animate_back'+str(frame))
+            elif self.direction == 90:
+                self.image = get_image('player/design/player_animate_side_right'+str(frame))
+            else:
+                self.image = get_image('player/design/player_animate_side_left'+str(frame))
+            if self.moving == 16:
+                self.moving = 1
+                
+            self.moving += 1
+
