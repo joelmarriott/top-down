@@ -9,9 +9,9 @@ def draw_window(win, this_world, player, inventory, event, menu):
     win.fill(pygame.Color(0,0,0))
     this_world.draw(win)
     player.draw(win)
-    menu.draw(win, event)
+    menu.draw(win, event, inventory)
     if inventory.inv_toggle:
-        inventory.draw(win, (500, 300), event)
+        inventory.draw(win, event)
     
     pygame.display.update()
     
@@ -81,6 +81,7 @@ def main():
                 pygame.quit()
                 quit()
                 
+              
             inventory.check_input(event)
         
         player.move()

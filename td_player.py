@@ -7,7 +7,7 @@ class Player:
         self.pos_y = pos_y - 4
         self.vel_x = 0
         self.vel_y = 0
-        self.speed = 5
+        self.speed = 8
         self.image = get_image('player/design/player_animate1')
         self.direction = 0
         
