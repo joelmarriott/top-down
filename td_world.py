@@ -41,9 +41,9 @@ class WorldMap:
                 self.world_map[i].append(Tile(image, solid))
         
     def draw(self, win):
-        tile_x = (WIN_WIDTH - (len(self.world_map[0]) * TILE_SIZE)) / 2 + (TILE_SIZE / 2)
+        tile_x = (WIN_WIDTH - ((len(self.world_map[0]) - 1) * (TILE_SIZE - 0.2))) / 2
         start_tile_x = tile_x
-        tile_y = (WIN_HEIGHT - (len(self.world_map)* TILE_SIZE)) / 2 + (TILE_SIZE / 2.5)
+        tile_y = (WIN_HEIGHT - ((len(self.world_map) - 1)* (TILE_SIZE - 0.2))) / 2
         for row in self.world_map:
             for tile in row:
                 if tile:
