@@ -55,26 +55,26 @@ class Player:
     def get_player_image(self):
         if self.moving == 0:
             if self.direction == 0:
-                self.image = get_image('player/design/player_base_male1')
+                self.image = get_image('player/player_base_male1')
             elif self.direction == 180:
-                self.image = get_image('player/design/player_base_male_back1')
+                self.image = get_image('player/player_base_male_back1')
             elif self.direction == 90:
-                self.image = get_image('player/design/player_base_male_right1')
+                self.image = get_image('player/dplayer_base_male_right1')
             else:
-                self.image = get_image('player/design/player_base_male_left1')
+                self.image = get_image('player/player_base_male_left1')
                 
         if self.moving > 0:
             frame = round(self.moving/4)
             if frame == 0:
                 frame = 1
             if self.direction == 0:
-                self.image = get_image('player/design/player_base_male'+str(frame))
+                self.image = get_image('player/player_base_male'+str(frame))
             elif self.direction == 180:
-                self.image = get_image('player/design/player_base_male_back'+str(frame))
+                self.image = get_image('player/player_base_male_back'+str(frame))
             elif self.direction == 90:
-                self.image = get_image('player/design/player_base_male_right'+str(frame))
+                self.image = get_image('player/player_base_male_right'+str(frame))
             else:
-                self.image = get_image('player/design/player_base_male_left'+str(frame))
+                self.image = get_image('player/player_base_male_left'+str(frame))
             if self.moving == 16:
                 self.moving = 1
                 

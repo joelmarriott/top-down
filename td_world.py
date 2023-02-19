@@ -12,7 +12,7 @@ class WorldMap:
     def construct_map(self, map_matrix):
         images = [
                      0,
-                     get_image('world/tile_grass'),         # 1
+                     get_image('world/floor/grass'),         # 1
                      get_image('world/barrier/fence_horizontal'),             # 2
                      get_image('world/barrier/fence_left'),             # 3
                      get_image('world/barrier/fence_right'),        # 4
@@ -33,11 +33,11 @@ class WorldMap:
                 if tile >= 1 and tile <= 8:
                     grass_type = random.randint(0,100)
                     if grass_type < 60:
-                        subimage = get_image('world/tile_grass')
+                        subimage = get_image('world/floor/grass')
                     elif grass_type >= 80:
-                        subimage = get_image('world/tile_grass_1')
+                        subimage = get_image('world/floor/grass_1')
                     else:
-                        subimage = get_image('world/tile_grass_2')
+                        subimage = get_image('world/floor/grass_2')
                 if tile == 1:
                     image = subimage
                     subimage = None

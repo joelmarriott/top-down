@@ -67,8 +67,8 @@ def main():
     inventory = Inventory()
     
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
-    pygame.display.set_caption('Unnamed Top Down Game')
-    pygame.display.set_icon(get_image('player'))
+    pygame.display.set_caption('PixelMMO - I Don\'t Even Know')
+    pygame.display.set_icon(get_image('player/player_base_male1'))
     clock = pygame.time.Clock()
     
     run = True
