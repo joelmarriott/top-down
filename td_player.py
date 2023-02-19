@@ -1,10 +1,10 @@
-from td_common import get_image
 import pygame
+from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
 
 class Player:
-    def __init__(self, pos_x, pos_y):
-        self.pos_x = pos_x - 4
-        self.pos_y = pos_y - 4
+    def __init__(self):
+        self.pos_x = (WIN_WIDTH - (TILE_SIZE / 2)) / 2
+        self.pos_y = (WIN_HEIGHT - (TILE_SIZE / 2)) / 2
         self.vel_x = 0
         self.vel_y = 0
         self.speed = 8
@@ -55,26 +55,26 @@ class Player:
     def get_player_image(self):
         if self.moving == 0:
             if self.direction == 0:
-                self.image = get_image('player/design/player_base_male1')
+                self.image = get_image('player/player_base_male1')
             elif self.direction == 180:
-                self.image = get_image('player/design/player_base_male_back1')
+                self.image = get_image('player/player_base_male_back1')
             elif self.direction == 90:
-                self.image = get_image('player/design/player_base_male_right1')
+                self.image = get_image('player/player_base_male_right1')
             else:
-                self.image = get_image('player/design/player_base_male_left1')
+                self.image = get_image('player/player_base_male_left1')
                 
         if self.moving > 0:
             frame = round(self.moving/4)
             if frame == 0:
                 frame = 1
             if self.direction == 0:
-                self.image = get_image('player/design/player_base_male'+str(frame))
+                self.image = get_image('player/player_base_male'+str(frame))
             elif self.direction == 180:
-                self.image = get_image('player/design/player_base_male_back'+str(frame))
+                self.image = get_image('player/player_base_male_back'+str(frame))
             elif self.direction == 90:
-                self.image = get_image('player/design/player_base_male_right'+str(frame))
+                self.image = get_image('player/player_base_male_right'+str(frame))
             else:
-                self.image = get_image('player/design/player_base_male_left'+str(frame))
+                self.image = get_image('player/player_base_male_left'+str(frame))
             if self.moving == 16:
                 self.moving = 1
                 

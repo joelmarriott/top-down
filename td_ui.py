@@ -1,5 +1,5 @@
-from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
 import pygame
+from td_common import get_image, WIN_WIDTH, WIN_HEIGHT
 
 
 class Slot:
@@ -11,20 +11,20 @@ class Slot:
         self.toggle = False
         self.selected = False
         
-    def draw(self, box, event, window_pos):
+    def draw(self, box, window_pos):
         self.selected = False
         box.blit(self.image, self.pos)
         self.rect.x = self.pos[0] + window_pos[0]
         self.rect.y = self.pos[1] + window_pos[1]
-        self.check_slot(box, event)
-
-    def check_slot(self, box, event):
         if self.slot_type == 'inventory':
             box.blit(get_image('ui/bag'), self.pos)
-                    
+        if self.selected:
+            box.blit(get_image('ui/slot_select'), self.pos)
+        
+
+    def check_slot(self, box, event):
         if event.type == pygame.MOUSEMOTION:
             if self.rect.collidepoint(event.pos):
-                box.blit(get_image('ui/slot_select'), self.pos)
                 self.selected = True
                 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -48,20 +48,12 @@ class Menu:
             self.slots.append(Slot((pos_x, 6), menu_item))
             pos_x += 31
         
-    def draw(self, win, event, inventory):
+    def draw(self, win):
         self.box = pygame.Surface((self.width, self.height))
         self.box.blit(self.BACKGROUND, (0,0))
         pos = ((WIN_WIDTH - self.width) / 2, WIN_HEIGHT - self.height)
         for slot in self.slots:
-            slot.draw(self.box, event, pos)
-            if slot.selected and slot.toggle:
-                slot.toggle = False
-                if slot.slot_type == 'inventory':
-                    if inventory.inv_toggle == False:
-                        inventory.inv_toggle = True
-                    elif inventory.inv_toggle == True:
-                        inventory.inv_toggle = False
-                    break
+            slot.draw(self.box, pos)
         win.blit(self.box, pos)
 
 
@@ -74,6 +66,7 @@ class Inventory:
         self.pos = (WIN_WIDTH / 5, WIN_HEIGHT / 4)
         self.inv_toggle = False
         self.rectangle_draging = False
+        self.slot_active = False
         self.slots = [
             self.slot_row(10, [15, 30]),
             self.slot_row(10, [15, 61]),
@@ -83,7 +76,6 @@ class Inventory:
         ]
         
     def draw(self, win, event):
-        x, y = self.pos
         self.box = pygame.Surface((self.width, self.height))
         self.box.blit(self.BACKGROUND, (0,0))
         self.rect.x = self.pos[0]
@@ -92,24 +84,9 @@ class Inventory:
         
         for row in self.slots:
             for slot in row:
-                slot.draw(self.box, event, self.pos)
+                slot.draw(self.box, self.pos)
                 if slot.selected:
                     self.slot_active = True
-
-        if event.type == pygame.MOUSEBUTTONDOWN and not self.slot_active:
-            if event.button == 1:
-                if self.rect.collidepoint(event.pos):
-                    self.rectangle_draging = True
-                    mouse_x, mouse_y = event.pos
-                    self.offset_x = x - mouse_x
-                    self.offset_y = y - mouse_y
-
-        elif event.type == pygame.MOUSEMOTION and not self.slot_active:
-            if self.rectangle_draging:
-                mouse_x, mouse_y = event.pos
-                x = mouse_x + self.offset_x
-                y = mouse_y + self.offset_y
-        self.pos = (x, y)
 
         win.blit(self.box, self.pos)
         
@@ -135,3 +112,31 @@ class Inventory:
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:            
                 self.rectangle_draging = False
+                
+        x, y = self.pos
+        if event.type == pygame.MOUSEBUTTONDOWN and not self.slot_active:
+            if event.button == 1:
+                if self.rect.collidepoint(event.pos):
+                    self.rectangle_draging = True
+                    mouse_x, mouse_y = event.pos
+                    self.offset_x = x - mouse_x
+                    self.offset_y = y - mouse_y
+
+        elif event.type == pygame.MOUSEMOTION and not self.slot_active:
+            if self.rectangle_draging:
+                mouse_x, mouse_y = event.pos
+                x = mouse_x + self.offset_x
+                y = mouse_y + self.offset_y
+        self.pos = (x, y)
+                
+        for row in self.slots:
+            for slot in row:
+                if slot.selected and slot.toggle:
+                    slot.toggle = False
+                    if slot.slot_type == 'inventory':
+                        if self.inv_toggle == False:
+                            self.inv_toggle = True
+                        elif slot.inv_toggle == True:
+                            slot.inv_toggle = False
+                            
+                    slot.check_slot(event)

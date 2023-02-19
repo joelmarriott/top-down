@@ -1,18 +1,21 @@
-from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
+from td_common import get_image, TILE_SIZE
 import random
 import pygame
+import csv
+import os
 
 class WorldMap:
-    def __init__(self, map_matrix):
-        self.world_map = []
-        self.construct_map(map_matrix)
-        self.pos_x = (WIN_WIDTH - ((len(self.world_map[0]) - 1) * (TILE_SIZE - 0.2))) / 2
-        self.pos_y = (WIN_HEIGHT - ((len(self.world_map) - 1)* (TILE_SIZE - 0.2))) / 2
+    def __init__(self, map_name):
+        self.world_map = self.construct_map(map_name)
+        self.pos_x = 0
+        self.pos_y = 0
         
-    def construct_map(self, map_matrix):
+    def construct_map(self, map_name):
+        map_matrix = self.read_in_csv(map_name)
+        world_map = []
         images = [
                      0,
-                     get_image('world/tile_grass'),         # 1
+                     get_image('world/floor/grass'),         # 1
                      get_image('world/barrier/fence_horizontal'),             # 2
                      get_image('world/barrier/fence_left'),             # 3
                      get_image('world/barrier/fence_right'),        # 4
@@ -22,7 +25,7 @@ class WorldMap:
                      get_image('world/barrier/fence_topright'), # 8  (top_right)
         ]
         for i, row in enumerate(map_matrix):
-            self.world_map.append([])
+            world_map.append([])
             for tile in row:
                 solid = False
                 if tile <= 0:
@@ -33,20 +36,34 @@ class WorldMap:
                 if tile >= 1 and tile <= 8:
                     grass_type = random.randint(0,100)
                     if grass_type < 60:
-                        subimage = get_image('world/tile_grass')
+                        subimage = get_image('world/floor/grass')
                     elif grass_type >= 80:
-                        subimage = get_image('world/tile_grass_1')
+                        subimage = get_image('world/floor/grass_1')
                     else:
-                        subimage = get_image('world/tile_grass_2')
+                        subimage = get_image('world/floor/grass_2')
                 if tile == 1:
                     image = subimage
                     subimage = None
-                self.world_map[i].append(Tile(image, solid, subimage))
+                world_map[i].append(Tile(image, solid, subimage))
+        return world_map
+    
+    def read_in_csv(self, map_name):
+        map_matrix = []
+        directory = os.path.join(os.path.realpath(os.path.dirname(__file__)),
+                              'assets',
+                              'world')
+        with open(os.path.join(directory, map_name+'.map')) as map_file:
+            csv_reader = csv.reader(map_file, delimiter=',')
+            for row in csv_reader:
+                map_row = [ int(value) for value in row]
+                map_matrix.append(map_row)
+        return map_matrix
+                
         
     def draw(self, win):
-        tile_x = self.pos_x
+        tile_x = self.pos_x - ((len(self.world_map[0]) / 2) * 12)
         start_tile_x = tile_x
-        tile_y = self.pos_y
+        tile_y = self.pos_y - ((len(self.world_map) / 2) * 16)
         for row in self.world_map:
             for tile in row:
                 if tile:
