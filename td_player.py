@@ -1,10 +1,10 @@
-from td_common import get_image, WIN_WIDTH, WIN_HEIGHT
 import pygame
+from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
 
 class Player:
-    def __init__(self, pos_x, pos_y):
-        self.pos_x = (WIN_WIDTH - 16) / 2
-        self.pos_y = (WIN_HEIGHT - 16) / 2
+    def __init__(self):
+        self.pos_x = (WIN_WIDTH - (TILE_SIZE / 2)) / 2
+        self.pos_y = (WIN_HEIGHT - (TILE_SIZE / 2)) / 2
         self.vel_x = 0
         self.vel_y = 0
         self.speed = 8

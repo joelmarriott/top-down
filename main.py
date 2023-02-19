@@ -1,93 +1,53 @@
 import pygame
-from td_common import get_image, WIN_WIDTH, WIN_HEIGHT, TILE_SIZE
+from td_common import get_image, WIN_WIDTH, WIN_HEIGHT
 from td_world import WorldMap
 from td_player import Player
 from td_ui import Menu, Inventory
-
-
-def draw_window(win, this_world, player, inventory, event, menu):
-    win.fill(pygame.Color(0,0,0))
-    this_world.draw(win)
-    player.draw(win)
-    menu.draw(win, event, inventory)
-    if inventory.inv_toggle:
-        inventory.draw(win, event)
-    
-    pygame.display.update()
     
 
 def main():
-    map_matrix = [
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-    ]
-    '''[ 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0, 0, 0, 0, 0 ],
-            [ 0, 0, 0, 0, 0, 2,  2,  2,  2,  2,  0, 0, 0, 0, 0 ],
-            [ 0, 0, 0, 0, 6, 1,  1,  1,  1,  1,  9, 0, 0, 0, 0 ],
-            [ 0, 0, 0, 6, 1, 1,  1,  1,  1,  1,  1, 9, 0, 0, 0 ],
-            [ 0, 0, 6, 1, 1, 1,  1,  1,  1,  1,  1, 1, 9, 0, 0 ],
-            [ 0, 3, 1, 1, 1, 10, 10, 1,  10, 10, 1, 1, 1, 5, 0 ],
-            [ 0, 3, 1, 1, 1, 10, 1,  1,  1,  10, 1, 1, 1, 5, 0 ],
-            [ 0, 3, 1, 1, 1, 1,  1,  1,  1,  1,  1, 1, 1, 5, 0 ],
-            [ 0, 3, 1, 1, 1, 10, 1,  1,  1,  10, 1, 1, 1, 5, 0 ],
-            [ 0, 3, 1, 1, 1, 10, 10, 1,  10, 10, 1, 1, 1, 5, 0 ],
-            [ 0, 0, 7, 1, 1, 1,  1,  1,  1,  1,  1, 1, 8, 0, 0 ],
-            [ 0, 0, 0, 7, 1, 1,  1,  1,  1,  1,  1, 8, 0, 0, 0 ],
-            [ 0, 0, 0, 0, 7, 1,  1,  1,  1,  1,  8, 0, 0, 0, 0 ],
-            [ 0, 0, 0, 0, 0, 4,  4,  4,  4,  4,  0, 0, 0, 0, 0 ],
-            [ 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0, 0, 0, 0, 0 ]'''
-    this_world = WorldMap(map_matrix)
-
-    player_x = (WIN_WIDTH - TILE_SIZE) / 2
-    player_y = (WIN_HEIGHT - TILE_SIZE) / 2
-    player = Player(player_x, player_y)
-    
-    menu = Menu()
-    
-    inventory = Inventory()
-    
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     pygame.display.set_caption('PixelMMO - I Don\'t Even Know')
     pygame.display.set_icon(get_image('player/player_base_male1'))
     clock = pygame.time.Clock()
     
+    this_world = WorldMap('overworld')
+    player = Player()
+    menu = Menu()
+    inventory = Inventory()
+    
     run = True
     while run:
         clock.tick(30)
         events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-                quit()
+        draw_window(win, this_world, player, inventory, events, menu)
+        run = input(this_world, events, inventory, menu, player)
+        
+        
+def draw_window(win, this_world, player, inventory, event, menu):
+    win.fill(pygame.Color(0,0,0))
+    this_world.draw(win)
+    player.draw(win)
+    menu.draw(win)
+    if inventory.inv_toggle:
+        inventory.draw(win)
+    
+    pygame.display.update()
+    
+    
+def input(this_world, events, inventory, menu, player):
+    run = True
+    this_world.check_collide(player)
+    for event in events:
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+            quit()
                 
-              
-            inventory.check_input(event)
-        
-        player.move(this_world)
-        
-        draw_window(win, this_world, player, inventory, event, menu)
-        this_world.check_collide(player)
+        inventory.check_input(event)
+    player.move(this_world)
+    
+    return run
 
 
 if __name__ == '__main__':
