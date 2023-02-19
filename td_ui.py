@@ -71,7 +71,7 @@ class Inventory:
         self.width = self.BACKGROUND.get_width()
         self.height = self.BACKGROUND.get_height()
         self.rect = self.BACKGROUND.get_rect()
-        self.pos = (500, 300)
+        self.pos = (WIN_WIDTH / 5, WIN_HEIGHT / 4)
         self.inv_toggle = False
         self.rectangle_draging = False
         self.slots = [
