@@ -6,8 +6,8 @@ class WorldMap:
     def __init__(self, map_matrix):
         self.world_map = []
         self.construct_map(map_matrix)
-        self.pos_x = (WIN_WIDTH - ((len(self.world_map[0]) - 1) * (TILE_SIZE - 0.2))) / 2
-        self.pos_y = (WIN_HEIGHT - ((len(self.world_map) - 1)* (TILE_SIZE - 0.2))) / 2
+        self.pos_x = 0
+        self.pos_y = 0
         
     def construct_map(self, map_matrix):
         images = [
@@ -44,9 +44,9 @@ class WorldMap:
                 self.world_map[i].append(Tile(image, solid, subimage))
         
     def draw(self, win):
-        tile_x = self.pos_x
+        tile_x = self.pos_x - ((len(self.world_map[0]) / 2) * 12)
         start_tile_x = tile_x
-        tile_y = self.pos_y
+        tile_y = self.pos_y - ((len(self.world_map) / 2) * 16)
         for row in self.world_map:
             for tile in row:
                 if tile:

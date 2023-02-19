@@ -1,10 +1,10 @@
-from td_common import get_image
+from td_common import get_image, WIN_WIDTH, WIN_HEIGHT
 import pygame
 
 class Player:
     def __init__(self, pos_x, pos_y):
-        self.pos_x = pos_x - 4
-        self.pos_y = pos_y - 4
+        self.pos_x = (WIN_WIDTH - 16) / 2
+        self.pos_y = (WIN_HEIGHT - 16) / 2
         self.vel_x = 0
         self.vel_y = 0
         self.speed = 8
@@ -59,7 +59,7 @@ class Player:
             elif self.direction == 180:
                 self.image = get_image('player/player_base_male_back1')
             elif self.direction == 90:
-                self.image = get_image('player/dplayer_base_male_right1')
+                self.image = get_image('player/player_base_male_right1')
             else:
                 self.image = get_image('player/player_base_male_left1')
                 
