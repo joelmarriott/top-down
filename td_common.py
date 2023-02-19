@@ -2,8 +2,8 @@ import pygame
 import os
 
 
-WIN_WIDTH = 1280
-WIN_HEIGHT = 720
+WIN_WIDTH = 640
+WIN_HEIGHT = 360
 TILE_SIZE = 32
 
 
