@@ -29,7 +29,7 @@ def draw_window(win, this_world, player, inventory, event, menu):
     this_world.draw(win)
     player.draw(win)
     menu.draw(win)
-    if inventory.inv_toggle:
+    if inventory.toggle:
         inventory.draw(win)
     
     pygame.display.update()
@@ -45,6 +45,7 @@ def input(this_world, events, inventory, menu, player):
             quit()
                 
         inventory.check_input(event)
+        menu.check_input(event, inventory)
     player.move(this_world)
     
     return run
