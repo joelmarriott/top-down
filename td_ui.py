@@ -12,7 +12,6 @@ class Slot:
         self.selected = False
         
     def draw(self, box, window_pos):
-        self.selected = False
         box.blit(self.image, self.pos)
         self.rect.x = self.pos[0] + window_pos[0]
         self.rect.y = self.pos[1] + window_pos[1]
@@ -22,7 +21,8 @@ class Slot:
             box.blit(get_image('ui/slot_select'), self.pos)
         
 
-    def check_slot(self, box, event):
+    def check_slot(self, event):
+        self.selected = False
         if event.type == pygame.MOUSEMOTION:
             if self.rect.collidepoint(event.pos):
                 self.selected = True
@@ -55,6 +55,18 @@ class Menu:
         for slot in self.slots:
             slot.draw(self.box, pos)
         win.blit(self.box, pos)
+        
+    def check_input(self, event, inventory):
+        for slot in self.slots:
+            if slot.selected and slot.toggle:
+                slot.toggle = False
+                if slot.slot_type == 'inventory':
+                    if inventory.toggle == False:
+                        inventory.toggle = True
+                    elif inventory.toggle == True:
+                        inventory.toggle = False
+                            
+            slot.check_slot(event)
 
 
 class Inventory:
@@ -64,7 +76,7 @@ class Inventory:
         self.height = self.BACKGROUND.get_height()
         self.rect = self.BACKGROUND.get_rect()
         self.pos = (WIN_WIDTH / 5, WIN_HEIGHT / 4)
-        self.inv_toggle = False
+        self.toggle = False
         self.rectangle_draging = False
         self.slot_active = False
         self.slots = [
@@ -75,7 +87,7 @@ class Inventory:
             self.slot_row(10, [15, 154])
         ]
         
-    def draw(self, win, event):
+    def draw(self, win):
         self.box = pygame.Surface((self.width, self.height))
         self.box.blit(self.BACKGROUND, (0,0))
         self.rect.x = self.pos[0]
@@ -104,10 +116,10 @@ class Inventory:
         if event.type == pygame.KEYDOWN:
             keys = pygame.key.get_pressed()
             if keys[ord('i')]:
-                if self.inv_toggle == False:
-                    self.inv_toggle = True        
+                if self.toggle == False:
+                    self.toggle = True        
                 else:
-                    self.inv_toggle = False
+                    self.toggle = False
                     
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:            
@@ -133,10 +145,6 @@ class Inventory:
             for slot in row:
                 if slot.selected and slot.toggle:
                     slot.toggle = False
-                    if slot.slot_type == 'inventory':
-                        if self.inv_toggle == False:
-                            self.inv_toggle = True
-                        elif slot.inv_toggle == True:
-                            slot.inv_toggle = False
+                    pass
                             
-                    slot.check_slot(event)
+                slot.check_slot(event)
